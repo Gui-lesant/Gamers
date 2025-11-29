@@ -1,0 +1,39 @@
+// No array courseData.classes - Alteração para o dia 19/12/2025
+{ date: '2025-12-19', title: 'Recesso de Fim de Ano', description: 'Período de recesso - não haverá aula.', teacher: '', duration: 0, type: 'holiday', uc: 0 },
+
+// Na função renderTimeline() - Modificada para mostrar apenas o título
+function renderTimeline() {
+    let timelineHTML = '';
+    const today = new Date();
+    
+    courseData.classes.forEach(classItem => {
+        const classDate = new Date(classItem.date);
+        const isPast = classDate < today;
+        let eventClass = '';
+        let dateClass = 'timeline-date';
+        
+        if (classItem.type === 'holiday') {
+            eventClass = 'event-holiday';
+        } else if (classItem.type === 'cancelled' || classItem.type === 'change') {
+            eventClass = 'event-change';
+        }
+        
+        if (isPast && classItem.type === 'normal') {
+            dateClass += ' completed';
+        } else if (classItem.type === 'cancelled') {
+            dateClass += ' cancelled';
+        }
+        
+        // MODIFICAÇÃO AQUI: Removida a descrição e informações adicionais
+        timelineHTML += `
+            <div class="timeline-item ${eventClass}" data-date="${classItem.date}">
+                <div class="${dateClass}">${formatDate(classItem.date)}</div>
+                <div class="timeline-content">
+                    <h4>${classItem.title}</h4>
+                </div>
+            </div>
+        `;
+    });
+    
+    timelineEl.innerHTML = timelineHTML;
+}
